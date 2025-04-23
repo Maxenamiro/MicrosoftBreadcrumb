@@ -2,9 +2,11 @@
 
 ## Summary
 
-Short summary on functionality and used technologies.
+Simple breadcrumb for Sharepoint with no using your local server
 
-[picture of the solution in action, if possible]
+<img width="341" alt="Screenshot 2025-04-23 at 15 37 24" src="https://github.com/user-attachments/assets/cd5ea467-cce3-4230-af8a-81ca25f4688e" />
+
+<img width="247" alt="Screenshot 2025-04-23 at 15 37 11" src="https://github.com/user-attachments/assets/5a694c92-27cd-45cc-9061-d7b4dbc253e6" />
 
 ## Used SharePoint Framework Version
 
