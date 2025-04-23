@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://aonicdemotenant.sharepoint.com/_layouts/15/workbench.aspx",
+      "customActions": {
+        "414cddfb-689e-4a77-9153-3c2bff9e1272": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test message"
+          }
+        }
+      }
+    },
+    "breadcrumb": {
+      "pageUrl": "https://aonicdemotenant.sharepoint.com/_layouts/15/workbench.aspx",
+      "customActions": {
+        "414cddfb-689e-4a77-9153-3c2bff9e1272": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test message"
+          }
+        }
+      }
+    }
+  }
+}
