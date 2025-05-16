@@ -4,12 +4,16 @@ import {
 	PlaceholderName,
 } from '@microsoft/sp-application-base'
 import { Log } from '@microsoft/sp-core-library'
+import './BreadcrumbApplicationCustomizer.module.scss'
 
 const LOG_SOURCE: string = 'BreadcrumbApplicationCustomizer'
 
 export interface IBreadcrumbApplicationCustomizerProperties {}
 
 export default class BreadcrumbApplicationCustomizer extends BaseApplicationCustomizer<IBreadcrumbApplicationCustomizerProperties> {
+	private capitalizeFirstLetter(str: string): string {
+		return str.charAt(0).toUpperCase() + str.slice(1)
+	}
 	private placeholder: any
 
 	@override
@@ -18,7 +22,6 @@ export default class BreadcrumbApplicationCustomizer extends BaseApplicationCust
 
 		this.renderBreadcrumb()
 
-		// Следим за навигацией
 		this.context.application.navigatedEvent.add(this, this.renderBreadcrumb)
 
 		return Promise.resolve()
@@ -32,10 +35,11 @@ export default class BreadcrumbApplicationCustomizer extends BaseApplicationCust
 
 		const container = document.createElement('div')
 		container.id = 'custom-breadcrumb'
-		container.style.padding = '10px'
+		container.className = 'custom-breadcrumb'
 		container.style.fontSize = '14px'
+		container.style.color = 'inherit'
 
-		const pathParts = window.location.pathname
+		let pathParts = window.location.pathname
 			.split('/')
 			.filter(
 				(part) =>
@@ -46,43 +50,41 @@ export default class BreadcrumbApplicationCustomizer extends BaseApplicationCust
 					part !== '15'
 			)
 
+		console.log('Breadcrumb path parts before removing home:', pathParts)
+
+		// Убираем первую крошку, если она 'home'
+		if (pathParts.length > 0 && pathParts[0].toLowerCase() === 'home') {
+			pathParts.shift()
+		}
+
+		console.log('Breadcrumb path parts after removing home:', pathParts)
+
+		if (pathParts.length === 0) return
+
 		let breadcrumbHtml =
-			'<ol style="margin:0; padding:0; list-style:none; display:flex; flex-wrap:wrap; align-items:center;">'
+			'<ol style="margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;align-items:center;">'
 
-		// Всегда "Home"
-		breadcrumbHtml += `
-      <li>
-        <a href="/" style="text-decoration:none; color:blue;">Home</a>
-      </li>
-    `
-
-		let currentPath = '/'
+		let currentPath = '/sites'
 
 		pathParts.forEach((part, index) => {
 			const cleanPart = part.replace('.aspx', '')
 			const isLast = index === pathParts.length - 1
-			const isSiteName = index === 0
 
-			if (isSiteName) {
-				currentPath += `sites/${cleanPart}`
-			} else {
-				currentPath += `/SitePages/${cleanPart}`
+			if (index > 0) {
+				breadcrumbHtml += `<li style="margin:0 5px;">&gt;</li>`
 			}
 
-			breadcrumbHtml += `
-        <li style="margin: 0 5px;">&gt;</li>
-        <li>
-          ${
-						isLast
-							? `<span style="font-weight: bold;">${this.capitalizeFirstLetter(
-									decodeURIComponent(cleanPart)
-							  )}</span>`
-							: `<a href="${currentPath}" style="text-decoration:none; color:blue;">${this.capitalizeFirstLetter(
-									decodeURIComponent(cleanPart)
-							  )}</a>`
-					}
-        </li>
-      `
+			currentPath += index === 0 ? `/${cleanPart}` : `/SitePages/${cleanPart}`
+
+			const partHtml = isLast
+				? `<span style="font-weight:bold;color:inherit;text-decoration:none;">${this.capitalizeFirstLetter(
+						decodeURIComponent(cleanPart)
+				  )}</span>`
+				: `<a href="${currentPath}" style="text-decoration:none;color:inherit;">${this.capitalizeFirstLetter(
+						decodeURIComponent(cleanPart)
+				  )}</a>`
+
+			breadcrumbHtml += `<li>${partHtml}</li>`
 		})
 
 		breadcrumbHtml += '</ol>'
@@ -95,10 +97,5 @@ export default class BreadcrumbApplicationCustomizer extends BaseApplicationCust
 		if (this.placeholder && this.placeholder.domElement) {
 			this.placeholder.domElement.appendChild(container)
 		}
-	}
-
-	private capitalizeFirstLetter(text: string): string {
-		if (!text) return ''
-		return text.charAt(0).toUpperCase() + text.slice(1)
 	}
 }

@@ -1,9 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "microsoft-breadcrumb-client-side-solution",
+    "name": "breadcrumb-extension",
     "id": "498ebc78-f3cd-4dcd-b151-24cb2e081d96",
-    "version": "1.0.0.0",
+    "version": "1.0.0.6",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -16,10 +16,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "MicrosoftBreadcrumb description"
+        "default": "MicrosoftBreadcrumb extension header"
       },
       "longDescription": {
-        "default": "MicrosoftBreadcrumb description"
+        "default": "MicrosoftBreadcrumb extension header"
       },
       "screenshotPaths": [],
       "videoUrl": "",
